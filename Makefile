@@ -19,7 +19,7 @@ GOVET=$(GOCMD) vet
 # Build flags
 LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
-.PHONY: all build clean test coverage lint fmt help install run dev security security-vuln security-static security-deps security-install security-verify
+.PHONY: all build clean test coverage lint fmt help install run dev security security-vuln security-static security-deps security-install security-verify test-integration fmt-check
 
 # Default target
 all: clean fmt lint test build
@@ -75,6 +75,22 @@ lint:
 fmt:
 	@echo "Formatting code..."
 	$(GOFMT) ./...
+
+# Run tests with integration
+test-integration: test
+	@echo "✅ Integration tests completed (using standard test suite)"
+
+# Check code formatting (non-destructive)
+fmt-check:
+	@echo "Checking code formatting..."
+	@output=$$(gofmt -l .); \
+	if [ -n "$$output" ]; then \
+		echo "❌ Code formatting issues found:"; \
+		echo "$$output"; \
+		exit 1; \
+	else \
+		echo "✅ Code is properly formatted"; \
+	fi
 
 # Install dependencies
 install:
