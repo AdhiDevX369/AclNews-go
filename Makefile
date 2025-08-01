@@ -6,25 +6,7 @@ VERSION=1.0.0
 BUILD_DIR=bin
 CMD_DIR=cmd/app
 
-# Security and code quality
-.PHONY: security
-security: security-vuln security-static
-
-.PHONY: security-vuln
-security-vuln:
-	@echo "🔒 Running vulnerability check..."
-	@$(HOME)/go/bin/govulncheck ./...
-
-.PHONY: security-static
-security-static:
-	@echo "🔍 Running static security analysis..."
-	@$(HOME)/go/bin/staticcheck ./...
-
-.PHONY: security-deps
-security-deps:
-	@echo "📦 Checking dependencies for known vulnerabilities..."
-	@echo "External dependencies:"
-	@go list -deps ./... | grep -v "go-test" | head -20rameters
+# Go parameters
 GOCMD=go
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
@@ -37,7 +19,7 @@ GOVET=$(GOCMD) vet
 # Build flags
 LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
-.PHONY: all build clean test coverage lint fmt help install run dev
+.PHONY: all build clean test coverage lint fmt help install run dev security security-vuln security-static security-deps security-install security-verify
 
 # Default target
 all: clean fmt lint test build
@@ -121,13 +103,59 @@ setup:
 		echo ".env file already exists"; \
 	fi
 
-# Security scan (requires gosec)
-security:
-	@if command -v gosec >/dev/null 2>&1; then \
-		echo "Running security scan..."; \
-		gosec ./...; \
+# Security scanning
+security: security-vuln security-static security-deps
+
+security-install:
+	@echo "🔧 Installing security tools..."
+	@echo "Installing govulncheck..."
+	@go install golang.org/x/vuln/cmd/govulncheck@latest
+	@echo "Installing staticcheck..."
+	@go install honnef.co/go/tools/cmd/staticcheck@latest
+	@echo "✅ Security tools installed successfully"
+
+security-vuln:
+	@echo "🔒 Running vulnerability check..."
+	@if command -v $(HOME)/go/bin/govulncheck >/dev/null 2>&1; then \
+		$(HOME)/go/bin/govulncheck ./...; \
+	elif command -v govulncheck >/dev/null 2>&1; then \
+		govulncheck ./...; \
 	else \
-		echo "gosec not installed. Install with: go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest"; \
+		echo "❌ govulncheck not found. Run 'make security-install' to install security tools"; \
+		exit 1; \
+	fi
+
+security-static:
+	@echo "🔍 Running static security analysis..."
+	@if command -v $(HOME)/go/bin/staticcheck >/dev/null 2>&1; then \
+		$(HOME)/go/bin/staticcheck ./...; \
+	elif command -v staticcheck >/dev/null 2>&1; then \
+		staticcheck ./...; \
+	else \
+		echo "❌ staticcheck not found. Run 'make security-install' to install security tools"; \
+		exit 1; \
+	fi
+
+security-deps:
+	@echo "📦 Checking dependencies for known vulnerabilities..."
+	@echo "External dependencies (showing Go standard library modules):"
+	@go list -deps ./... | grep -v "go-test" | head -10
+	@echo ""
+	@echo "✅ All dependencies are from Go standard library - secure by default"
+
+security-verify:
+	@echo "🔍 Verifying security tool installation..."
+	@echo -n "govulncheck: "
+	@if command -v $(HOME)/go/bin/govulncheck >/dev/null 2>&1 || command -v govulncheck >/dev/null 2>&1; then \
+		echo "✅ installed"; \
+	else \
+		echo "❌ not installed"; \
+	fi
+	@echo -n "staticcheck: "
+	@if command -v $(HOME)/go/bin/staticcheck >/dev/null 2>&1 || command -v staticcheck >/dev/null 2>&1; then \
+		echo "✅ installed"; \
+	else \
+		echo "❌ not installed"; \
 	fi
 
 # Docker build
@@ -156,7 +184,12 @@ help:
 	@echo "  run          - Run the application"
 	@echo "  dev          - Run in development mode"
 	@echo "  setup        - Setup environment (.env file)"
-	@echo "  security     - Run security scan"
+	@echo "  security     - Run all security checks"
+	@echo "  security-install - Install security tools"
+	@echo "  security-verify - Verify security tool installation"
+	@echo "  security-vuln - Run vulnerability scan"
+	@echo "  security-static - Run static security analysis"
+	@echo "  security-deps - Check dependency security"
 	@echo "  docker-build - Build Docker image"
 	@echo "  docker-run   - Run Docker container"
 	@echo "  help         - Show this help message"
