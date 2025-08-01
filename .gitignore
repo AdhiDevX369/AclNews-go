@@ -1,0 +1,203 @@
+# =============================================================================
+# Professional Go Project .gitignore
+# =============================================================================
+
+# =============================================================================
+# Go specific
+# =============================================================================
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+*.html
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Dependency directories
+vendor/
+
+# =============================================================================
+# Security & Secrets
+# =============================================================================
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+.env.test
+config.local.*
+secrets.*
+keys/
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+apikeys.json
+
+# =============================================================================
+# Build artifacts & Distribution
+# =============================================================================
+# Build outputs
+bin/
+dist/
+build/
+out/
+target/
+
+# Docker build context
+.dockerignore
+
+# =============================================================================
+# Development & IDE
+# =============================================================================
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vs/
+.sublime-project
+.sublime-workspace
+
+# JetBrains IDEs
+*.iml
+*.ipr
+*.iws
+
+# =============================================================================
+# Operating System
+# =============================================================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+
+# Windows
+ehthumbs.db
+Thumbs.db
+Thumbs.db:encryptable
+desktop.ini
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# =============================================================================
+# Logs & Debugging
+# =============================================================================
+# Application logs
+*.log
+logs/
+debug.log
+error.log
+access.log
+application.log
+
+# Debug files
+debug.*
+*.debug
+*.prof
+*.pprof
+
+# =============================================================================
+# Testing & Coverage
+# =============================================================================
+# Coverage reports
+coverage.out
+coverage.html
+coverage.xml
+.coverage
+coverage/
+htmlcov/
+
+# Test artifacts
+*.test
+test-results/
+testdata/local/
+
+# =============================================================================
+# Temporary & Cache
+# =============================================================================
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+*.tmp
+*.temp
+
+# Cache directories
+.cache/
+cache/
+
+# Node.js (if using for tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =============================================================================
+# Deployment & Infrastructure
+# =============================================================================
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+terraform.tfvars.json
+*.auto.tfvars
+
+# Kubernetes
+kustomization.yaml
+*.yaml.local
+
+# Docker
+docker-compose.override.yml
+docker-compose.local.yml
+
+# =============================================================================
+# Application Specific
+# =============================================================================
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# AI/ML models (if any)
+*.model
+*.weights
+models/
+
+# Application data
+data/
+uploads/
+downloads/
+
+# =============================================================================
+# Monitoring & Observability
+# =============================================================================
+# Prometheus metrics
+*.metrics
+
+# Jaeger traces
+traces/
