@@ -4,6 +4,7 @@ import feedparser
 import requests
 import json
 import os
+import sys
 import time
 from datetime import datetime
 from typing import List, Dict, Optional
@@ -159,7 +160,7 @@ class SinhalaWriter:
     
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.base_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent"
+        self.base_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent"
     
     def write_anime_post_in_my_style(self, title: str, summary: str, link: str) -> str:
         """Generates authentic Sinhala post using AI"""
@@ -195,29 +196,22 @@ class SinhalaWriter:
     
     def _build_persona_prompt(self, title: str, summary: str, link: str) -> str:
         """Build the persona-driven prompt for AI"""
-        return f"""**AI System Persona:**
+        return f"""You are a casual Sri Lankan anime fan writing for friends. Write in natural Sinhala with mixed English - just like how real Sri Lankans talk. Keep it simple, casual and fun.
 
-You are 'Anime Api' (අනිමේ ඇපි), a popular anime blogger from Sri Lanka. Your audience is young, energetic Sri Lankan anime fans who follow your social media page for the latest updates. Your writing style is extremely casual, fun, and uses natural, everyday Sinhala mixed with common English words (Singlish). You often use common Sri Lankan expressions and slang to sound more authentic. You must NEVER sound like a formal news reporter or a machine translation. Your goal is to get your followers hyped about the news.
+**Style:**
+- Mix Sinhala and English naturally (like "anime එකක්", "game එක", "trailer එක")
+- Use casual words: "අයියේ", "අක්කේ", "කොල්ලා", "කෙල්ලටත්" 
+- Common expressions: "ඒකනේ", "මේකද", "කොහොමද", "නේද"
+- Keep it short and excited
+- Add some emojis
+- End with a question
 
-**Writing Style Guidelines:**
-- Use casual, conversational Sinhala
-- Mix Sinhala with English words naturally (like real Sri Lankan speech)
-- Use expressions like "අයියලා", "අක්කලා", "පුලුවන්", "බලන්නකෝ", "එහෙම නම්"
-- Add excitement with words like "කට්ටිය", "සුපිරි", "අපරාදේ", "නියමයි"
-- Use emojis sparingly but effectively
-- Keep it under 250 words
-- End with a question to engage followers
+**News:**
+Title: {title}
+Summary: {summary}
+Link: {link}
 
-**Your Task:**
-
-Write a fun, casual social media post about this anime news. Make it sound like you're talking to your friends. Get them excited about the news!
-
-**News Details:**
-- **Title:** {title}
-- **Summary:** {summary}
-- **Source Link:** {link}
-
-Write the post now in your authentic 'Anime Api' style. Remember - sound like a real Sri Lankan anime fan, not a translation!"""
+Write a casual post now:"""
 
 class SocialMediaPublisher:
     """Tool 4: publish_post - Publishes content to social media platforms"""
@@ -398,7 +392,7 @@ def load_config():
         "TELEGRAM_BOT_TOKEN": os.getenv("TELEGRAM_BOT_TOKEN"),
         "TELEGRAM_CHAT_ID": os.getenv("TELEGRAM_CHAT_ID"),
         "MAX_ARTICLES": int(os.getenv("MAX_ARTICLES", 5)),
-        "REQUEST_TIMEOUT": int(os.getenv("REQUEST_TIMEOUT", 30))
+        "REQUEST_TIMEOUT": int(os.getenv("REQUEST_TIMEOUT", "30").replace("s", ""))
     }
 
 # Main application

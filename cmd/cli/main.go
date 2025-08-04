@@ -27,12 +27,12 @@ func main() {
 
 	// Initialize services
 	stdLogger := log.New(os.Stdout, "[ANIME-API-CLI] ", log.LstdFlags)
-	
+
 	rssFetcher := services.NewRSSFetcher()
 	duplicateChecker := services.NewDuplicateChecker()
 	sinhalaWriter := services.NewSinhalaWriter(cfg.GeminiAPIKey)
 	socialMediaPublisher := services.NewSocialMediaPublisher(cfg.TelegramBotToken, cfg.TelegramChatID)
-	
+
 	orchestrator := services.NewAnimeApiOrchestrator(
 		rssFetcher,
 		duplicateChecker,
@@ -57,12 +57,12 @@ func main() {
 		if err != nil {
 			log.Fatalf("Failed to get status: %v", err)
 		}
-		
+
 		fmt.Printf("📈 Status Report:\n")
 		fmt.Printf("   Published Articles: %d\n", status.PublishedCount)
 		fmt.Printf("   Last Run: %s\n", status.LastRun.Format("2006-01-02 15:04:05"))
 		fmt.Printf("   Recent Articles: %d\n", len(status.RecentArticles))
-		
+
 		for _, svc := range status.ServiceStatuses {
 			fmt.Printf("   %s: %s", svc.Name, svc.Status)
 			if svc.Error != "" {

@@ -57,7 +57,7 @@ func (aao *AnimeApiOrchestrator) ExecuteCycle(ctx context.Context) error {
 	var selectedArticle *models.AnimeNews
 	for i, article := range articles {
 		aao.logger.Printf("🔍 Checking article %d: %s", i+1, article.Title)
-		
+
 		isNew, err := aao.duplicateChecker.CheckIfPostedBefore(article.Link)
 		if err != nil {
 			aao.logger.Printf("⚠️  Error checking duplicate for article %d: %v", i+1, err)
@@ -136,7 +136,7 @@ func (aao *AnimeApiOrchestrator) GetStatus(ctx context.Context) (*models.Orchest
 
 	// Test connections
 	var connectionStatus []models.ServiceStatus
-	
+
 	// Test social media connection
 	socialMediaErr := aao.socialMediaPublisher.TestConnection(ctx)
 	connectionStatus = append(connectionStatus, models.ServiceStatus{

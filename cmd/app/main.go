@@ -75,8 +75,8 @@ func main() {
 		})
 	} else {
 		appLogger.Info("Final status report", map[string]interface{}{
-			"published_count":  status.PublishedCount,
-			"recent_articles":  len(status.RecentArticles),
+			"published_count": status.PublishedCount,
+			"recent_articles": len(status.RecentArticles),
 			"last_run":        status.LastRun.Format("2006-01-02 15:04:05"),
 		})
 	}
