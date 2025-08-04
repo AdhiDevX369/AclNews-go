@@ -9,11 +9,15 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Config holds all configuration for the application
+// Config represents application configuration
 type Config struct {
 	// API Configuration
 	GeminiAPIKey string
 	NewsAPIKey   string
+
+	// Social Media Configuration
+	TelegramBotToken string
+	TelegramChatID   string
 
 	// Application Configuration
 	Port        string
@@ -43,6 +47,10 @@ func Load() (*Config, error) {
 		// Required API keys
 		GeminiAPIKey: getEnv("GEMINI_API_KEY", ""),
 		NewsAPIKey:   getEnv("NEWS_API_KEY", ""),
+
+		// Social Media Configuration
+		TelegramBotToken: getEnv("TELEGRAM_BOT_TOKEN", ""),
+		TelegramChatID:   getEnv("TELEGRAM_CHAT_ID", ""),
 
 		// Application settings
 		Port:        getEnv("PORT", "8080"),
